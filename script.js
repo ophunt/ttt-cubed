@@ -1,7 +1,10 @@
 "use strict";
 let game = {
     turn: 1,
+    location: [[1, 1], [1, 1]],
 };
+
+const moveMade = new Event("move made");
 
 const sizes = [150, 500];
 const margins = [5, 25];
@@ -15,8 +18,14 @@ function setup() {
     const lctx = leftBoard.getContext("2d");
     const rctx = rightBoard.getContext("2d");
 
+    // TODO: Add hover listener to left board
+
+    // TODO: Add click listener to the right board, calling dispatch of movemade event
+
+    // Init board
     game.board = new Board(2);
 
+    // Return contexts
     return [lctx, rctx];
 }
 
@@ -63,7 +72,7 @@ function drawX(ctx, p, r, pt) {
 class Board {
     // 0 = none, 1 = x, 2 = o
     constructor(depth) {
-        this.winner = Math.ceil(Math.random() - 0.5)+1;
+        this.winner = 0; // Math.ceil(Math.random() - 0.5)+1;
         this.depth = depth;
 
         if (depth === 0) {
@@ -80,6 +89,10 @@ class Board {
             ];
         }
     }
+
+    // TODO: Win checking
+    // TODO: Check move validity before moving (might be related to the click handler)
+    // TODO: Highlighting active board with color of player to play
 
     draw(ctx, isL, topLeft) {
         // Get size, margin, and pt
@@ -152,7 +165,10 @@ class Board {
 
 function main() {
     const [lctx, rctx] = setup();
-    draw([lctx, rctx]);
+    document.addEventListener(moveMade, () => draw([lctx, rctx]), false);
 }
 
 main();
+
+// TODO Sockets for multiplayer
+// TODO Real homework
